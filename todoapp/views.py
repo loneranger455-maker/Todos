@@ -21,6 +21,7 @@ def get_tokens_for_user(user):
     }
 
 
+
 class Signup(APIView):
     permission_classes=[AllowAny]
     renderer_classes=[TodoRenderer]

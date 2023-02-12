@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { StoreToken } from './Localstorage'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 
 function Error(props){
@@ -24,7 +25,7 @@ function SignUp() {
   const handleFormSubmit=(e)=>{
 e.preventDefault()
     const formdata=new FormData(e.target)
-    axios.post('http://localhost:8000/signup/',formdata).then((resp)=>{
+    axios.post('http://localhost:8000/api/signupUser/',formdata).then((resp)=>{
     console.log(resp)
     if(resp.data.errors){
       setError(resp.data.errors)
@@ -105,7 +106,12 @@ e.preventDefault()
                         >
                             SignUp
                         </button>
-                        <p className='text-gray-700'>Already have an account?<a href='/' className='text-blue-900'>login</a></p>
+                        <p className='text-gray-700'>Already have an account?
+                        <Link to='/'>
+                        <span  className='text-blue-900'> login</span>
+                        </Link>
+                        </p>
+                        
                     </div>
                 </form>
                 {errors.non_field_errors?<Error error={errors.non_field_errors}/>:""}

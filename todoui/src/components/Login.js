@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { StoreToken } from './Localstorage'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 
 
@@ -25,7 +26,7 @@ function Login() {
 
     e.preventDefault()
         const formdata=new FormData(e.target)
-        axios.post('http://localhost:8000/login/',formdata).then((resp)=>{
+        axios.post('http://localhost:8000/api/login/',formdata).then((resp)=>{
         console.log(resp)
         if(resp.data.errors){
           setError(resp.data.errors)
@@ -81,7 +82,11 @@ function Login() {
                         >
                             Login
                         </button>
-                        <p className='text-gray-700'>New to Stu-Do?<a href='signup/' className='text-blue-900'>signup</a></p>
+                        <p className='text-gray-700'>New to Stu-Do?
+                        <Link to='signup/'>
+                        <span  className='text-blue-900'> signup</span>
+                        </Link>
+                        </p>
                     </div>
                 </form>
                 {errors.nonfielderrors?<Error error={errors.nonfielderrors}/>:""}

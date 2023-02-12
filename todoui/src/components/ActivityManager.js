@@ -23,7 +23,7 @@ function ActivityManager() {
 
 e.preventDefault()
     const formdata=new FormData(e.target)
-    axios.post('http://localhost:8000/tododata/',formdata,{"headers":{"authorization":`Bearer ${access}`
+    axios.post('http://localhost:8000/api/tododata/',formdata,{"headers":{"authorization":`Bearer ${access}`
 
     }}).then((resp)=>{
     
@@ -39,7 +39,7 @@ e.preventDefault()
   }
 
   const deletetodo=(id)=>{
-    axios.delete(`http://localhost:8000/tododata/${id}`,{"headers":{"authorization":`Bearer ${access}`
+    axios.delete(`http://localhost:8000/api/tododata/${id}`,{"headers":{"authorization":`Bearer ${access}`
 
     }}).then((resp)=>{
     
@@ -54,7 +54,7 @@ e.preventDefault()
 
   }
   useEffect(()=>{
-    axios.get('http://localhost:8000/tododata/',{"headers":{"authorization":`Bearer ${access}`}}).then((response)=>{
+    axios.get('http://localhost:8000/api/tododata/',{"headers":{"authorization":`Bearer ${access}`}}).then((response)=>{
     setTodos(response.data.data)
       setUser(response.data.username)
 
