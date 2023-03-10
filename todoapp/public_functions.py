@@ -4,4 +4,4 @@ def dictfetchall(cursor):
     return [
         dict(zip(columns, row))
         for row in cursor.fetchall()
-    ][::-1]
+    ]

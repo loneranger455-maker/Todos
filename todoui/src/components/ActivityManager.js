@@ -6,6 +6,8 @@ import {FaUserAlt} from 'react-icons/fa'
 import {TbLogout} from 'react-icons/tb'
 import { DeleteToken } from './Localstorage'
 import { useNavigate } from 'react-router'
+import {IoCheckmarkDoneCircleSharp} from 'react-icons/io5'
+import {IoMdCheckmarkCircle} from 'react-icons/io'
 
 function ActivityManager() {
   const {access}=GetToken()
@@ -53,6 +55,21 @@ e.preventDefault()
     )
 
   }
+  const updatetodo=(id)=>{
+    axios.post(`http://localhost:8000/api/markdone/${id}/`,{data:"false"},{"headers":{"authorization":`Bearer ${access}`
+
+    }}).then((resp)=>{
+    console.log(resp)
+    setTodos(resp.data)
+    setInputtodo("")
+
+  }
+    ).catch((err)=>{
+      console.log(err)
+    }
+    )
+
+  }
   useEffect(()=>{
     axios.get('http://localhost:8000/api/tododata/',{"headers":{"authorization":`Bearer ${access}`}}).then((response)=>{
     setTodos(response.data.data)
@@ -87,7 +104,14 @@ e.preventDefault()
         <div className='flex flex-col gap-4 mt-10 items-center overflow-auto'>
            {todos.length>0?todos.map((todos,key)=>(
             <div key={key} className='w-[30rem] relative bg-gray-200  p-2 rounded shadow-xl flex'>
+
+{todos.completed?
+              <p className='bg-green-500 line-through'>{todos.data}</p>:
+              <>
               <p>{todos.data}</p>
+              <button className='absolute right-10 text-green-900 hover:text-red-900' onClick={()=>updatetodo(todos.id)}><IoMdCheckmarkCircle/></button>
+              </>
+           }
               <button className='absolute right-4 text-red-700 hover:text-red-900' onClick={()=>deletetodo(todos.id)}><MdDeleteForever/></button>
             </div>
            )):<p className='font-light text-gray-800 text-sm'>No todos to shows</p>}

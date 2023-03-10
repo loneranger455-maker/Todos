@@ -57,28 +57,51 @@ class Login(APIView):
 class SaveTodos(APIView):
     permission_classes=[IsAuthenticated]
     renderer_classes=[TodoRenderer]
-    def get(self,request):
+    def get(self,request,pk=None):
         username=request.user.username
         with connection.cursor() as cursor:
-            cursor.execute("SELECT id,data FROM todoapp_mytodos WHERE username=%s",[request.user.username])
+            cursor.execute("SELECT id,data,completed FROM todoapp_mytodos WHERE username=%s ORDER BY completed ASC",[request.user.username])
             response=dictfetchall(cursor)
             response={"data":response,"username":username}
         return Response(response)
-    def post(self,request):       
+    def post(self,request,pk=None):       
 
         serializeddata=TodoSerializer(data=request.data)
         if serializeddata.is_valid(raise_exception=True):
             with connection.cursor() as cursor:
                 cursor.execute("INSERT INTO todoapp_mytodos (username,data) values(%s,%s)",[request.user.username,request.data["data"]])
-                cursor.execute("SELECT id,data FROM todoapp_mytodos WHERE username=%s",[request.user.username])
+                cursor.execute("SELECT id,data,completed FROM todoapp_mytodos WHERE username=%s ORDER BY completed ASC",[request.user.username])
                 response=dictfetchall(cursor)
             return Response(response)
-    def delete(self,request,pk):
+    def delete(self,request,pk=None):
         with connection.cursor() as cursor:
             cursor.execute("DELETE FROM todoapp_mytodos WHERE id=%s",[pk])
-            cursor.execute("SELECT id,data FROM todoapp_mytodos WHERE username=%s",[request.user.username])
+            cursor.execute("SELECT id,data,completed FROM todoapp_mytodos WHERE username=%s ORDER BY completed ASC",[request.user.username])
             response=dictfetchall(cursor)
         
         return Response(response)
+    # def put(self,request,pk=None):
+    #     print(pk)
+    #     with connection.cursor() as cursor:
+    #         cursor.execute("UPDATE todoapp_mytodos SET completed=%s WHERE id=%s",[False,pk])
+    #         cursor.execute("SELECT id,data FROM todoapp_mytodos WHERE username=%s ORDER BY completed DESC",[request.user.username])
+    #         response=dictfetchall(cursor)
+        
+    #     return Response(response)
+
+
+class markdone(APIView):
+    permission_classes=[IsAuthenticated]
+    renderer_classes=[TodoRenderer]
+    def post(self,request,pk):
+        print(pk)
+        with connection.cursor() as cursor:
+            cursor.execute("UPDATE todoapp_mytodos SET completed=%s WHERE id=%s",[True,pk])
+            cursor.execute("SELECT id,data,completed FROM todoapp_mytodos WHERE username=%s ORDER BY completed ASC",[request.user.username])
+            response=dictfetchall(cursor)
+            print(response)
+        
+        return Response(response)
+
         
         

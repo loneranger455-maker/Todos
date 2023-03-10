@@ -4,7 +4,7 @@ from .models import *
 class TodoSerializer(serializers.ModelSerializer):
     class Meta:
         model=MyTodos
-        fields=('id','data')
+        fields=['id','data','completed']
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

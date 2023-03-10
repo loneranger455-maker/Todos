@@ -72,3 +72,6 @@ class User(AbstractBaseUser):
 class MyTodos(models.Model):
     username=models.CharField(max_length=100)
     data=models.CharField(max_length=100)
+    completed=models.BooleanField(default=False)
+
+
